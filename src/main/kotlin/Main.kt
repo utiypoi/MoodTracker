@@ -1,19 +1,35 @@
 package com.ekaterina
 
-const val nameProgram = "MoodTracker"
-const val versionProgram = 1.0
-
 fun main() {
-    val nameUser: String
-    var countNote = 0
-    print("Введите имя: ")
-    nameUser = readln()
-    val outputText = """
-        $nameProgram $versionProgram
-        Имя пользователя: $nameUser
-        Количество записей: $countNote
-        Приветствую, $nameUser!
-        Приложение позволит пользователю записывать настроение, вести дневник, анализировать статистику, искать записи и управлять ими. Сначала оно будет состоять из простых переменных и функций, а постепенно превратится в полноценное приложение с классами, интерфейсами, коллекциями, сохранением данных и асинхронными операциями.
+    val userName: String = "Иван"
+    var userYears: Int = 20
+    val userCity = "Москва"
+    var userActivityTracker = true
+    var moodMiddleScore: Double = 7.5
+    val favoriteSymbol: Char = ')'
+
+    var moodCountNotes: Int = 5
+    val moodTargetNotes = 10.0
+    var moodDaysNotesAll: Int = 5
+    var moodDaysNotesPositive: Int
+    var moodDaysNotesNegative: Int
+
+    var moodTargetNotesCurrent = moodCountNotes / moodTargetNotes * 10
+    var moodTargetPercent: Double = (moodTargetNotes - moodCountNotes) / moodTargetNotes * 100
+
+    println(
+        """
+        === MOOD TRACKER ===
+        
+        Пользователь: $userName
+        Возраст: $userYears
+        Город: $userCity
+        
+        === Статистика ===
+        Всего записей: $moodCountNotes
+        Цель: $moodTargetNotes
+        Выполнение цели: $moodTargetPercent %
+        Осталось записей: $moodTargetNotesCurrent
     """.trimIndent()
-    print(outputText)
+    )
 }
