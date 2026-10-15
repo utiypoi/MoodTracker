@@ -27,6 +27,21 @@ fun main() {
     //Процент положительных дней от общего количества дней
     var moodDaysNotesPositivePercent = (moodDaysNotesPositive / moodDaysNotesAll) * 100
 
+    var moodScoreCategory = when (moodScore.toDouble()) {
+        in 1.0..3.0 -> "Плохое"
+        in 4.0..6.0 -> "Нейтральное"
+        in 7.0..10.0 -> "Хорошее"
+        else -> "Оценка некорректна"
+    }
+    var moodTargetNotesInfo = if (moodCountNotes > moodTargetNotes) {
+        "Записей больше цели: превышено на ${moodCountNotes - moodTargetNotes} записей"
+    } else if (moodCountNotes == moodTargetNotes) {
+        "Цель достигнута"
+    } else "Записей меньше цели: осталось ${moodTargetNotes - moodCountNotes} записей"
+
+    var userActivityTrackerInfo = if (!userActivityTracker) {
+        "Вернуться к заполнению дневника?"
+    } else "Дневник ведется регулярно"
     println(
         """
         === MOOD TRACKER ===
@@ -37,12 +52,17 @@ fun main() {
         
         === Статистика ===
         Всего записей: ${moodCountNotes.toInt()}
+        Положительные записи: $moodDaysNotesPositivePercent
         Цель: ${moodTargetNotes.toInt()}
         Выполнение цели: ${String.format("%.2f", moodTargetPercent)} %
-        Осталось записей: ${moodTargetNotesCurrent.toInt()}
+        $moodTargetNotesInfo
         Средняя оценка настроения: ${String.format("%.2f", moodMiddleScore)}
+        Оценка настроения: $moodScore из 10
+        Категория настроения: $moodScoreCategory
         Количество дней для выполнения цели: ${trackerCountDatsTarget.toInt()}
-        Оценка настроения: ${moodScore.toDouble()} из 10
+        $userActivityTrackerInfo
     """.trimIndent()
     )
+
+
 }
