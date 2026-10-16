@@ -1,6 +1,10 @@
 package com.ekaterina
 
 fun main() {
+
+    println("Введите оценку настроения от 1 до 10")
+    val moodScoreInput = readln()
+    val moodScoreInputDouble = moodScoreInput.toDoubleOrNull()
     val userName: String = "Иван"
     var userYears: Int = 20
     val userCity = "Москва"
@@ -26,13 +30,15 @@ fun main() {
 
     //Процент положительных дней от общего количества дней
     var moodDaysNotesPositivePercent = (moodDaysNotesPositive / moodDaysNotesAll) * 100
+    var moodScoreCategory =
+        if (moodScoreInputDouble != null && (1.0 <= moodScoreInputDouble && moodScoreInputDouble <= 10.0)) {
+            when (moodScoreInputDouble) {
+                in 1.0..3.99 -> "Плохое"
+                in 4.0..6.99 -> "Нейтральное"
+                else -> "Хорошее"
+            }
+        } else "Оценка некорректна"
 
-    var moodScoreCategory = when (moodScore.toDouble()) {
-        in 1.0..3.0 -> "Плохое"
-        in 4.0..6.0 -> "Нейтральное"
-        in 7.0..10.0 -> "Хорошее"
-        else -> "Оценка некорректна"
-    }
     var moodTargetNotesInfo = if (moodCountNotes > moodTargetNotes) {
         "Записей больше цели: превышено на ${moodCountNotes - moodTargetNotes} записей"
     } else if (moodCountNotes == moodTargetNotes) {
@@ -52,12 +58,12 @@ fun main() {
         
         === Статистика ===
         Всего записей: ${moodCountNotes.toInt()}
-        Положительные записи: $moodDaysNotesPositivePercent
+        Положительные записи: $moodDaysNotesPositivePercent %
         Цель: ${moodTargetNotes.toInt()}
         Выполнение цели: ${String.format("%.2f", moodTargetPercent)} %
         $moodTargetNotesInfo
         Средняя оценка настроения: ${String.format("%.2f", moodMiddleScore)}
-        Оценка настроения: $moodScore из 10
+        Оценка настроения: ${moodScoreInputDouble ?: "Некорректный ввод"} из 10
         Категория настроения: $moodScoreCategory
         Количество дней для выполнения цели: ${trackerCountDatsTarget.toInt()}
         $userActivityTrackerInfo
