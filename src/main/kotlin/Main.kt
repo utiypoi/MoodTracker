@@ -11,6 +11,7 @@ fun main() {
         moodScoreInputDouble = moodScoreInput.toDoubleOrNull()
     }
     val moodScore = moodScoreInput.toDouble()
+
     val userName: String = "Иван"
     var userYears: Int = 20
     val userCity = "Москва"
@@ -52,8 +53,20 @@ fun main() {
     var userActivityTrackerInfo = if (!userActivityTracker) {
         "Вернуться к заполнению дневника?"
     } else "Дневник ведется регулярно"
-    println(
-        """
+
+    while (true){
+        val menu = """Главное меню
+        1. Записать настроение
+        2. Показать статистику
+        3. Выход
+        Выберите действие
+    """.trimIndent()
+        println(menu)
+        val menuSelector = readln().toIntOrNull()
+        when(menuSelector){
+            1 -> println("Запись настроения")
+            2 -> println(
+                """
         === MOOD TRACKER ===
         
         Пользователь: $userName
@@ -72,7 +85,13 @@ fun main() {
         Количество дней для выполнения цели: ${trackerCountDatsTarget.toInt()}
         $userActivityTrackerInfo
     """.trimIndent()
-    )
-
+            )
+            3 -> {
+                println("До свидания!")
+                break
+            }
+            else -> println("Неизвестная команда. Попробуйте еще раз.")
+        }
+    }
 
 }
