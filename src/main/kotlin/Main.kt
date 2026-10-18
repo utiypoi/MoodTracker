@@ -22,6 +22,8 @@ fun main() {
     var moodScorePositivePercent = 0.0
     var moodScoreNegativePercent = 0.0
 
+    val moodCategoryStats = mutableMapOf("Плохое" to 0, "Нейтральное" to 0, "Хорошее" to 0)
+
     var moodTargetNotesInfo: String
 
     val userActivityTrackerInfo = if (!userActivityTracker) {
@@ -72,6 +74,7 @@ fun main() {
                             "Хорошее"
                         }
                     }
+                moodCategoryStats[moodScoreCategory] = moodCategoryStats.getValue(moodScoreCategory) + 1
                 moodScoreAll += moodScore
                 println("Настроение записано: ${String.format("%.1f", moodScoreInputDouble)} из 10")
                 moodTargetPercent = (moodNotesHistory.size.toDouble() / moodTargetNotes) * 100
@@ -106,6 +109,10 @@ fun main() {
         Категория настроения: $moodScoreCategory
         Количество дней для выполнения цели: ${trackerCountDatsTarget.toInt()}
         $userActivityTrackerInfo
+        === Статистика по категориям ===
+        Плохое настроение: ${moodCategoryStats.get("Плохое")}
+        Нейтральное настроение: ${moodCategoryStats.get("Нейтральное")}
+        Хорошее настроение: ${moodCategoryStats.get("Хорошее")}
     """.trimIndent()
                 )
             }
@@ -129,7 +136,11 @@ fun main() {
                         moodTargetPercent = 0.0
                         moodScore = 0.0
                         moodScoreCategory = "Нет данных"
+                        moodCategoryStats.set("Плохое", 0)
+                        moodCategoryStats.set("Нейтральное", 0)
+                        moodCategoryStats.set("Хорошее", 0)
                     }
+
                     "нет" -> println("Сброс отменен")
                     else -> println("Некорректный ответ")
                 }
