@@ -1,9 +1,9 @@
 package com.ekaterina
 
-data class MoodEntry(
-    val score: Double,
-    val category: String
-)
+//data class MoodEntry(
+//    val score: Double,
+//    val category: String
+//)
 
 fun getMoodCategory(score: Double): String {
     return when (score) {
@@ -14,6 +14,27 @@ fun getMoodCategory(score: Double): String {
     }
 }
 
+fun showMoodHistory(history: List<Double>) {
+    if (history.isEmpty()) println("История пока пуста")
+    else {
+        println("История настроения: ")
+        for (i in history.indices) {
+            println("${i + 1}. ${history[i]}")
+        }
+    }
+}
+
+fun readMoodScore(): Double {
+    println("Введите оценку настроения от 1 до 10")
+    var moodScore = readln().toDoubleOrNull()
+    while (moodScore == null || moodScore !in 1.0..10.0) {
+        println("Некорректная оценка. Поробуйте еще раз.")
+        moodScore = readln().toDoubleOrNull()
+    }
+    println("Настроение записано: ${String.format("%.1f", moodScore)} из 10")
+    return moodScore
+}
+
 fun main() {
     val userName = "Иван"
     val userYears = 20
@@ -21,7 +42,7 @@ fun main() {
     val userActivityTracker = true
     var moodMiddleScore = 0.0
     var moodScoreAll = 0.0
-    val favoriteSymbol = ')'
+//    val favoriteSymbol = ')'
     val moodNotesHistory: MutableList<Double> = mutableListOf()
     val moodTargetNotes = 10.0
     var moodScorePositive = 0.0
@@ -29,7 +50,7 @@ fun main() {
 
     var moodTargetPercent = 0.0
 
-    var trackerCountDays = 13
+//    var trackerCountDays = 13
     val trackerCountDatsTarget = "30"
 
     var moodScorePositivePercent = 0.0
@@ -52,28 +73,20 @@ fun main() {
         Выберите действие
     """.trimIndent()
     //Ввод пользователя оценки настроения
-    var moodScoreInput: String
-    var moodScoreInputDouble: Double?
+//    var moodScoreInput: String
+//    var moodScoreInputDouble: Double?
     var moodScore = 0.0
+
     while (true) {
         println(menu)
         val menuSelector = readln().toIntOrNull()
         when (menuSelector) {
             1 -> {
-                println("Введите оценку настроения от 1 до 10")
-                moodScoreInput = readln()
-                moodScoreInputDouble = moodScoreInput.toDoubleOrNull()
-                while (moodScoreInputDouble == null || moodScoreInputDouble !in 1.0..10.0) {
-                    println("Некорректная оценка. Поробуйте еще раз.")
-                    moodScoreInput = readln()
-                    moodScoreInputDouble = moodScoreInput.toDoubleOrNull()
-                }
-                moodScore = moodScoreInputDouble
+                moodScore = readMoodScore()
                 moodNotesHistory.add(moodScore)
                 moodCategoryStats[getMoodCategory(moodScore)] =
                     moodCategoryStats.getValue(getMoodCategory(moodScore)) + 1
                 moodScoreAll += moodScore
-                println("Настроение записано: ${String.format("%.1f", moodScoreInputDouble)} из 10")
                 moodTargetPercent = (moodNotesHistory.size.toDouble() / moodTargetNotes) * 100
                 moodScorePositivePercent = (moodScorePositive / moodNotesHistory.size) * 100
                 moodScoreNegativePercent = (moodScoreNegative / moodNotesHistory.size) * 100
@@ -147,12 +160,7 @@ fun main() {
             }
 
             5 -> {
-                if (moodNotesHistory.isNotEmpty()) {
-                    println("История настроения: ")
-                    for (i in 0..<moodNotesHistory.size) {
-                        println("${i + 1}. ${moodNotesHistory[i]}")
-                    }
-                } else println("История пока пуста")
+                showMoodHistory(moodNotesHistory)
             }
 
             else -> println("Неизвестная команда. Попробуйте еще раз.")
