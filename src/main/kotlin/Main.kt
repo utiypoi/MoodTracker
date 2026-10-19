@@ -1,5 +1,19 @@
 package com.ekaterina
 
+data class MoodEntry(
+    val score: Double,
+    val category: String
+)
+
+fun getMoodCategory(score: Double): String {
+    return when (score) {
+        in 1.0..3.99 -> "Плохое"
+        in 4.0..6.99 -> "Нейтральное"
+        in 7.00..10.0 -> "Хорошее"
+        else -> "Нет данных"
+    }
+}
+
 fun main() {
     val userName = "Иван"
     val userYears = 20
@@ -8,7 +22,6 @@ fun main() {
     var moodMiddleScore = 0.0
     var moodScoreAll = 0.0
     val favoriteSymbol = ')'
-
     val moodNotesHistory: MutableList<Double> = mutableListOf()
     val moodTargetNotes = 10.0
     var moodScorePositive = 0.0
@@ -42,7 +55,6 @@ fun main() {
     var moodScoreInput: String
     var moodScoreInputDouble: Double?
     var moodScore = 0.0
-    var moodScoreCategory = "Нет данных"
     while (true) {
         println(menu)
         val menuSelector = readln().toIntOrNull()
@@ -58,23 +70,8 @@ fun main() {
                 }
                 moodScore = moodScoreInputDouble
                 moodNotesHistory.add(moodScore)
-                moodScoreCategory =
-                    when (moodScore) {
-                        in 1.0..3.99 -> {
-                            moodScoreNegative++
-                            "Плохое"
-                        }
-
-                        in 4.0..6.99 -> {
-                            "Нейтральное"
-                        }
-
-                        else -> {
-                            moodScorePositive++
-                            "Хорошее"
-                        }
-                    }
-                moodCategoryStats[moodScoreCategory] = moodCategoryStats.getValue(moodScoreCategory) + 1
+                moodCategoryStats[getMoodCategory(moodScore)] =
+                    moodCategoryStats.getValue(getMoodCategory(moodScore)) + 1
                 moodScoreAll += moodScore
                 println("Настроение записано: ${String.format("%.1f", moodScoreInputDouble)} из 10")
                 moodTargetPercent = (moodNotesHistory.size.toDouble() / moodTargetNotes) * 100
@@ -106,7 +103,10 @@ fun main() {
         $moodTargetNotesInfo
         Средняя оценка настроения: ${String.format("%.2f", moodMiddleScore)}
         Оценка настроения: ${"%.2f".format(moodScore)} из 10
-        Категория настроения: $moodScoreCategory
+        Категория настроения: ${
+                        if (moodNotesHistory.isEmpty()) "Нет данных"
+                        else getMoodCategory(moodScore)
+                    }
         Количество дней для выполнения цели: ${trackerCountDatsTarget.toInt()}
         $userActivityTrackerInfo
         === Статистика по категориям ===
@@ -135,7 +135,7 @@ fun main() {
                         moodScoreNegativePercent = 0.0
                         moodTargetPercent = 0.0
                         moodScore = 0.0
-                        moodScoreCategory = "Нет данных"
+                        getMoodCategory(moodScore)
                         moodCategoryStats.set("Плохое", 0)
                         moodCategoryStats.set("Нейтральное", 0)
                         moodCategoryStats.set("Хорошее", 0)
@@ -159,4 +159,3 @@ fun main() {
         }
     }
 }
-
