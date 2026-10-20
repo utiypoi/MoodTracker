@@ -35,6 +35,33 @@ fun readMoodScore(): Double {
     return moodScore
 }
 
+fun addMoodEntry(score: Double, history: MutableList<Double>, categoryStats: MutableMap<String, Int>) {
+    history.add(score)
+    val category = getMoodCategory(score)
+    categoryStats[category] = categoryStats.getValue(category) + 1
+}
+
+fun showPositiveMoods(history: List<Double>) {
+    val positiveMoods = history.filter { it in 7.0..10.0 }
+    if (positiveMoods.isEmpty()) println("Положительных оценок пока нет")
+    else {
+        println("Положительные оценки: ")
+        for (i in positiveMoods.indices) {
+            println("${i + 1}: ${positiveMoods[i]}")
+        }
+    }
+}
+
+fun showMoodCategories(history: List<Double>) {
+    val categories = history.map { getMoodCategory(it) }
+    if (history.isEmpty()) println("История пока пуста")
+    else {
+            for (i in categories.indices){
+                println("${i+1}: ${categories[i]}")
+        }
+    }
+}
+
 fun main() {
     val userName = "Иван"
     val userYears = 20
@@ -70,6 +97,8 @@ fun main() {
         3. Выход
         4. Сбросить статистику
         5. Показать историю настроения
+        6. Показать положительные оценки
+        7. Показать категории настроения
         Выберите действие
     """.trimIndent()
     //Ввод пользователя оценки настроения
@@ -83,9 +112,7 @@ fun main() {
         when (menuSelector) {
             1 -> {
                 moodScore = readMoodScore()
-                moodNotesHistory.add(moodScore)
-                moodCategoryStats[getMoodCategory(moodScore)] =
-                    moodCategoryStats.getValue(getMoodCategory(moodScore)) + 1
+                addMoodEntry(moodScore, moodNotesHistory, moodCategoryStats)
                 moodScoreAll += moodScore
                 moodTargetPercent = (moodNotesHistory.size.toDouble() / moodTargetNotes) * 100
                 moodScorePositivePercent = (moodScorePositive / moodNotesHistory.size) * 100
@@ -123,9 +150,9 @@ fun main() {
         Количество дней для выполнения цели: ${trackerCountDatsTarget.toInt()}
         $userActivityTrackerInfo
         === Статистика по категориям ===
-        Плохое настроение: ${moodCategoryStats.get("Плохое")}
-        Нейтральное настроение: ${moodCategoryStats.get("Нейтральное")}
-        Хорошее настроение: ${moodCategoryStats.get("Хорошее")}
+                        Плохое настроение: ${moodCategoryStats["Плохое"]}
+                        Нейтральное настроение: ${moodCategoryStats["Нейтральное"]}
+                        Хорошее настроение: ${moodCategoryStats["Хорошее"]}
     """.trimIndent()
                 )
             }
@@ -149,9 +176,9 @@ fun main() {
                         moodTargetPercent = 0.0
                         moodScore = 0.0
                         getMoodCategory(moodScore)
-                        moodCategoryStats.set("Плохое", 0)
-                        moodCategoryStats.set("Нейтральное", 0)
-                        moodCategoryStats.set("Хорошее", 0)
+                        moodCategoryStats["Плохое"] = 0
+                        moodCategoryStats["Нейтральное"] = 0
+                        moodCategoryStats["Хорошее"] = 0
                     }
 
                     "нет" -> println("Сброс отменен")
@@ -159,9 +186,11 @@ fun main() {
                 }
             }
 
-            5 -> {
-                showMoodHistory(moodNotesHistory)
-            }
+            5 -> showMoodHistory(moodNotesHistory)
+
+            6 -> showPositiveMoods(moodNotesHistory)
+
+            7 -> showMoodCategories(moodNotesHistory)
 
             else -> println("Неизвестная команда. Попробуйте еще раз.")
         }
