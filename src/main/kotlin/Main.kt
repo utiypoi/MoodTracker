@@ -52,12 +52,16 @@ fun showPositiveMoods(history: List<Double>) {
     }
 }
 
+fun countPositiveMoods(history: List<Double>): Int{
+    return history.count { it in 7.0..10.0 }
+}
+
 fun showMoodCategories(history: List<Double>) {
     val categories = history.map { getMoodCategory(it) }
     if (history.isEmpty()) println("История пока пуста")
     else {
-            for (i in categories.indices){
-                println("${i+1}: ${categories[i]}")
+        for (i in categories.indices) {
+            println("${i + 1}: ${categories[i]}")
         }
     }
 }
@@ -188,9 +192,13 @@ fun main() {
 
             5 -> showMoodHistory(moodNotesHistory)
 
-            6 -> showPositiveMoods(moodNotesHistory)
+            6 -> {
+                showPositiveMoods(moodNotesHistory)
+                println("Количество: ${countPositiveMoods(moodNotesHistory)}")
+            }
 
             7 -> showMoodCategories(moodNotesHistory)
+
 
             else -> println("Неизвестная команда. Попробуйте еще раз.")
         }
